@@ -8,7 +8,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CustomizedHook({PreloadData}) {
+export default function CustomizedHook({PreloadData, Label}) {
   return (
     <Autocomplete
       multiple
@@ -27,9 +27,9 @@ export default function CustomizedHook({PreloadData}) {
           {option.Descripcion}
         </li>
       )}
-      style={{ width: 400 }}
+      style={{ width: 440 }}
       renderInput={(params) => (
-        <TextField {...params} label="Revisión por aparatos y sistemas" />
+        <TextField {...params} label={Label} />
       )}
     />
   );

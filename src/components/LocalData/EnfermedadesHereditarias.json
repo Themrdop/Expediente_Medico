@@ -1,0 +1,10 @@
+[
+    { "Id": "1", "Descripcion": "Alergias" },
+    { "Id": "2", "Descripcion": "Diabetes mellitus" },
+    { "Id": "3", "Descripcion": "Hipertensión arterial" },
+    { "Id": "4", "Descripcion": "Enfermedad raumatica" },
+    { "Id": "5", "Descripcion": "Enfermedad renal" },
+    { "Id": "6", "Descripcion": "Enfermedades oculares" },
+    { "Id": "7", "Descripcion": "Enfermedades rdiacas" },
+    { "Id": "8", "Descripcion": "Enfermedades hepaticas" }
+]

@@ -1,16 +1,16 @@
 import React from 'react'
 import { Form } from 'react-bootstrap';
 import CustomizedHook from './CustomizedHook'
-import EnfermedadesInfectoContagiosas from './LocalData/EnfermedadesInfectoContagiosas.json';
+import EnfermedadesHederitariasJson from './LocalData/EnfermedadesHereditarias.json'
 
-function AntecedentesFamiliares({onChangeForm}) {
+function EnfermedadesHederitarias({onChangeForm}) {
   return (
     <div className="container">
         <form>
             <div className="row">
                 <Form.Group className="col-md-12" controlId="edad">
-                    <Form.Label>Enfermedades infecto-contagiosas</Form.Label>
-                    <CustomizedHook PreloadData={EnfermedadesInfectoContagiosas}/>
+                    <Form.Label>Enfermedades hereditarias</Form.Label>
+                    <CustomizedHook PreloadData={EnfermedadesHederitariasJson} Label="Enfermedades hereditarias"/>
                     <br/>
                     <Form.Control as="textarea" rows={5} placeholder="Otros" onChange={(e) => onChangeForm(e)}/>
                 </Form.Group>
@@ -20,4 +20,4 @@ function AntecedentesFamiliares({onChangeForm}) {
   );
 }
 
-export default AntecedentesFamiliares;
+export default EnfermedadesHederitarias;
