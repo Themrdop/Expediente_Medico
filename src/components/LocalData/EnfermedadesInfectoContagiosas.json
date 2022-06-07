@@ -1,0 +1,10 @@
+[
+    { "Id": "1", "Descripcion": "Hepatitis" },
+    { "Id": "2", "Descripcion": "Sifilis" },
+    { "Id": "3", "Descripcion": "TB" },
+    { "Id": "4", "Descripcion": "Colera" },
+    { "Id": "5", "Descripcion": "Amebiasis" },
+    { "Id": "6", "Descripcion": "Tosferina" },
+    { "Id": "7", "Descripcion": "Sarampión" },
+    { "Id": "8", "Descripcion": "Varicela" }
+]

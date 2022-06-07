@@ -5,6 +5,7 @@ import DatosPersonales from './components/DatosPersonales';
 import MotivoConsulta from './components/MotivoConsulta';
 import HistoriaEnfermedadActual from './components/HistoriaEnfermedadActual';
 import RevisionPorAparatos from './components/RevisionPorAparatos'
+import AntecedentesFamiliares from './components/AntecedentesFamiliares';
 
 function AgregarPacienteModal({showModal, handleClose}) {
 
@@ -19,7 +20,8 @@ function AgregarPacienteModal({showModal, handleClose}) {
     const _MotivoConsulta = 1;
     const _HistoriaEnfermedadActual = 2;
     const _RevisionPorAparatos = 3;
-    const _MaxNumberPages = 3;
+    const _AntecedentesFamiliares = 4;
+    const _MaxNumberPages = 4;
 
     let _button;
 
@@ -45,6 +47,7 @@ function AgregarPacienteModal({showModal, handleClose}) {
                 {(currentPage === _MotivoConsulta) && <MotivoConsulta/>}
                 {(currentPage === _HistoriaEnfermedadActual) && <HistoriaEnfermedadActual/>}
                 {(currentPage === _RevisionPorAparatos) && <RevisionPorAparatos/>}
+                {(currentPage === _AntecedentesFamiliares) && <AntecedentesFamiliares/>}
             </Modal.Body>
             <Modal.Footer>
             <Button variant="secondary" onClick={() => {handleClose(); setcurrentPages(0);}}>

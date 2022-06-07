@@ -8,8 +8,8 @@ function RevisionPorAparatos({onChangeForm}) {
     <div className="container">
         <form>
             <div className="row">
-                <Form.Group className="col-md-12" controlId="edad">
-                    <Form.Label>Motivo de consulta</Form.Label>
+                <Form.Group className="col-md-12" controlId="motivoConsulta">
+                    <Form.Label>Revision por aparatos y sistemas</Form.Label>
                     <CustomizedHook PreloadData={RevisionData}/>
                     <br/>
                     <Form.Control as="textarea" rows={5} placeholder="Otros hallazgos en el interrogatorio" onChange={(e) => onChangeForm(e)}/>
