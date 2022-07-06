@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Form } from 'react-bootstrap';
 
-function MotivoConsulta({onChangeForm}) {
+function AntecedentesNoPatologicos({onChangeForm}) {
     return (
       <div className="container">
         <form>
@@ -106,4 +106,4 @@ function MotivoConsulta({onChangeForm}) {
     );
   }
   
-  export default MotivoConsulta;
+  export default AntecedentesNoPatologicos;

@@ -7,7 +7,8 @@ import HistoriaEnfermedadActual from './components/HistoriaEnfermedadActual';
 import RevisionPorAparatos from './components/RevisionPorAparatos'
 import EnfermedadesInfectoContagiosas from './components/EnfermedadesInfectoContagiosas';
 import EnfermedadesHederitarias from './components/EnfermedadesHederitarias';
-import AntecedentesNoPatologicos from './components/AntecedentesNoPatologicos'
+import AntecedentesNoPatologicos from './components/AntecedentesNoPatologicos';
+import AntecedentesPersonalesPatologicos from './components/AntecedentesPersonalesPatologicos';
 
 function AgregarPacienteModal({showModal, handleClose}) {
 
@@ -25,7 +26,8 @@ function AgregarPacienteModal({showModal, handleClose}) {
     const _EnfermedadesInfectoContagiosas = 4;
     const _EnfermedadesHederitarias = 5;
     const _AntecedentesNoPatologicos = 6;
-    const _MaxNumberPages = 6;
+    const _AntecedentesPersonalesPatologicos = 7;
+    const _MaxNumberPages = 7;
 
     let _button;
 
@@ -54,6 +56,7 @@ function AgregarPacienteModal({showModal, handleClose}) {
                 {(currentPage === _EnfermedadesInfectoContagiosas) && <EnfermedadesInfectoContagiosas/>}
                 {(currentPage === _EnfermedadesHederitarias) && <EnfermedadesHederitarias/>}
                 {(currentPage === _AntecedentesNoPatologicos) && <AntecedentesNoPatologicos/>}
+                {(currentPage === _AntecedentesPersonalesPatologicos) && <AntecedentesPersonalesPatologicos/>}
             </Modal.Body>
             <Modal.Footer>
             <Button variant="secondary" onClick={() => {handleClose(); setcurrentPages(0);}}>
