@@ -13,8 +13,8 @@ export const systemGroups = {
 export const infectiousOptions = ['Hepatitis', 'Sífilis', 'TB', 'Cólera', 'Amebiasis', 'Tosferina', 'Sarampión', 'Varicela', 'Rubéola', 'Parotiditis', 'Meningitis', 'Impétigo', 'Fiebre tifoidea', 'Escarlatina', 'Malaria', 'Escabiosis', 'Pediculosis', 'Tiña'];
 export const hereditaryOptions = ['Alergias', 'Diabetes mellitus', 'Hipertensión arterial', 'Enfermedad reumática', 'Enfermedad renal', 'Enfermedades oculares', 'Enfermedades cardiacas', 'Enfermedades hepáticas', 'Enfermedades musculares', 'Malformaciones congénitas', 'Desórdenes mentales'];
 
-export function Field({ label, value, onChange, type = 'text', placeholder, required, readOnly = false }) {
-  return <label className="field"><span>{label}{required && <b> *</b>}</span><input type={type} value={value || ''} placeholder={placeholder} readOnly={readOnly} onChange={(event) => onChange(event.target.value)} /></label>;
+export function Field({ label, value, onChange, type = 'text', placeholder, required, readOnly = false, rightElement, inputMode, maxLength }) {
+  return <label className="field"><span>{label}{required && <b> *</b>}</span><div className="field-input-wrap"><input type={type} value={value || ''} placeholder={placeholder} readOnly={readOnly} inputMode={inputMode} maxLength={maxLength} onChange={(event) => onChange(event.target.value)} />{rightElement && <div className="field-input-suffix">{rightElement}</div>}</div></label>;
 }
 
 export function SelectField({ label, value, onChange, options, required }) {

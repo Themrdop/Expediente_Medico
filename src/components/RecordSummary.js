@@ -7,7 +7,7 @@ function SummaryItem({ label, value }) {
 export function RecordSummary({ record, onBack, onEdit }) {
   const { patient, consultation, examination, createdAt } = record;
 
-  return
+  return (
   <div className="app-shell">
     <aside className="sidebar">
       <div className="brand">
@@ -83,5 +83,6 @@ export function RecordSummary({ record, onBack, onEdit }) {
         </section>
       </div>
     </main>
-  </div>;
+  </div>
+  );
 }
