@@ -16,7 +16,7 @@ const steps = [
 ];
 
 const emptyForm = {
-  patient: { name: '', recordNumber: '', idNumber: '', birthDate: '', age: '', sex: '', phone: '', address: '', occupation: '', religion: '', facility: '', service: '', room: '', bed: '', source: 'Paciente', reliability: 'Confiable' },
+  patient: { name: '', recordNumber: '', idNumber: '', birthDate: '', age: '', sex: '', phone: '', address: '', occupation: '', religion: '', facility: '', service: '', room: '', bed: '', NombrePadreMadre: '', reliability: 'Confiable' },
   consultation: { reason: '', currentIllness: '' },
   review: { selected: [], findings: '' },
   family: { infectious: [], hereditary: [], other: '' },

@@ -17,6 +17,10 @@ export function Field({ label, value, onChange, type = 'text', placeholder, requ
   return <label className="field"><span>{label}{required && <b> *</b>}</span><input type={type} value={value || ''} placeholder={placeholder} readOnly={readOnly} onChange={(event) => onChange(event.target.value)} /></label>;
 }
 
+export function SelectField({ label, value, onChange, options, required }) {
+  return <label className="field"><span>{label}{required && <b> *</b>}</span><select value={value || ''} onChange={(event) => onChange(event.target.value)}><option value="">Selecciona una opción</option>{options.map((option) => <option value={option} key={option}>{option}</option>)}</select></label>;
+}
+
 export function Textarea({ label, value, onChange, placeholder }) {
   return <label className="field field-wide"><span>{label}</span><textarea value={value || ''} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} /></label>;
 }
