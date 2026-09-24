@@ -34,14 +34,20 @@ function createRecordNumber(records) {
     String(now.getDate()).padStart(2, '0'),
   ].join('');
   const prefix = `EXP-${date}-`;
-  const dailyNumbers = records
-    .map((record) => (record.patient && record.patient.recordNumber) || '')
-    .filter((number) => number.startsWith(prefix))
-    .map((number) => Number(number.slice(prefix.length)))
-    .filter(Number.isInteger);
-  const nextNumber = Math.max(0, ...dailyNumbers) + 1;
+  const usedNumbers = new Set(
+    records
+      .map((record) => (record.patient && record.patient.recordNumber) || '')
+      .filter(Boolean),
+  );
+  let nextNumber = 1;
+  let candidate = `${prefix}${String(nextNumber).padStart(4, '0')}`;
 
-  return `${prefix}${String(nextNumber).padStart(4, '0')}`;
+  while (usedNumbers.has(candidate)) {
+    nextNumber += 1;
+    candidate = `${prefix}${String(nextNumber).padStart(4, '0')}`;
+  }
+
+  return candidate;
 }
 
 function App() {
@@ -72,6 +78,12 @@ function App() {
   };
   const saveRecord = async () => {
     if (!form.patient.name.trim() || !form.patient.idNumber.trim()) { setNotice('Completa el nombre y la cédula antes de guardar.'); setActiveStep(0); return; }
+    const recordNumberInUse = records.some((record) => record.patient && record.patient.recordNumber === form.patient.recordNumber);
+    if (recordNumberInUse) {
+      setNotice('El número de expediente ya existe. Inicia un expediente nuevo para generar otro número.');
+      setActiveStep(0);
+      return;
+    }
     const record = { ...form, id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), createdAt: new Date().toISOString() };
     const next = [record, ...records];
     setRecords(next);

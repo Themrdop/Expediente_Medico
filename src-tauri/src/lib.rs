@@ -22,6 +22,12 @@ fn connection(app: &tauri::AppHandle) -> Result<Connection, String> {
           created_at TEXT NOT NULL
         );",
     ).map_err(|error| error.to_string())?;
+    connection.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_patients_record_number
+         ON patients(record_number)
+         WHERE record_number IS NOT NULL AND record_number <> ''",
+        [],
+    ).map_err(|error| error.to_string())?;
     Ok(connection)
 }
 
@@ -35,7 +41,14 @@ fn save_patient(app: tauri::AppHandle, patient: Value) -> Result<(), String> {
     let record_number = patient_data.get("recordNumber").and_then(Value::as_str).unwrap_or_default();
     let created_at = patient.get("createdAt").and_then(Value::as_str).unwrap_or_default();
     connection.execute(
-        "INSERT OR REPLACE INTO patients (id, patient_name, identification, record_number, payload, created_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
+        "INSERT INTO patients (id, patient_name, identification, record_number, payload, created_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+         ON CONFLICT(id) DO UPDATE SET
+           patient_name = excluded.patient_name,
+           identification = excluded.identification,
+           record_number = excluded.record_number,
+           payload = excluded.payload,
+           created_at = excluded.created_at",
         params![id, name, identification, record_number, patient.to_string(), created_at],
     ).map_err(|error| error.to_string())?;
     Ok(())
