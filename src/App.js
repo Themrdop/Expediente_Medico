@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import './App.css';
 import { renderClinicalStep } from './components/ClinicalStepSections';
+import { RecordSummary } from './components/RecordSummary';
 
 const STORAGE_KEY = 'expediente-medico-records';
 
@@ -59,6 +60,7 @@ function App() {
   const [mode, setMode] = useState('list');
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState('');
+  const [selectedRecord, setSelectedRecord] = useState(null);
 
   const update = (section, field, value) => setForm((current) => ({ ...current, [section]: { ...current[section], [field]: value } }));
   const filteredRecords = useMemo(() => records.filter((record) => `${record.patient.name} ${record.patient.idNumber} ${record.patient.recordNumber}`.toLowerCase().includes(query.toLowerCase())), [records, query]);
@@ -78,14 +80,14 @@ function App() {
   };
   const saveRecord = async () => {
     if (!form.patient.name.trim() || !form.patient.idNumber.trim()) { setNotice('Completa el nombre y la cédula antes de guardar.'); setActiveStep(0); return; }
-    const recordNumberInUse = records.some((record) => record.patient && record.patient.recordNumber === form.patient.recordNumber);
+    const recordNumberInUse = records.some((record) => record.id !== form.id && record.patient && record.patient.recordNumber === form.patient.recordNumber);
     if (recordNumberInUse) {
       setNotice('El número de expediente ya existe. Inicia un expediente nuevo para generar otro número.');
       setActiveStep(0);
       return;
     }
-    const record = { ...form, id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), createdAt: new Date().toISOString() };
-    const next = [record, ...records];
+    const record = { ...form, id: form.id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())), createdAt: form.createdAt || new Date().toISOString() };
+    const next = form.id ? records.map((item) => item.id === form.id ? record : item) : [record, ...records];
     setRecords(next);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     if (window.__TAURI_INTERNALS__) {
@@ -97,10 +99,14 @@ function App() {
     setNotice('Expediente guardado correctamente.');
     setMode('list');
   };
+  const openRecord = (record) => { setSelectedRecord(record); setMode('summary'); };
+  const editRecord = () => { setForm(selectedRecord); setActiveStep(0); setMode('wizard'); setNotice(''); };
 
   const renderStep = () => renderClinicalStep({ current, form, update });
 
-  if (mode === 'list') return <div className="app-shell"><aside className="sidebar"><div className="brand"><span className="brand-mark">+</span><div><strong>Clínica</strong><small>Historia médica</small></div></div><div className="sidebar-status"><span className="status-dot" /> Base local SQLite<br /><small>Datos bajo tu control</small></div><div className="sidebar-footer">Versión inicial<br />Expedientes clínicos</div></aside><main className="main-area"><header className="topbar"><div><p className="kicker">GESTIÓN CLÍNICA</p><h1>Expedientes</h1><p className="muted">Administra las historias clínicas de tus pacientes.</p></div><button className="button button-primary" onClick={startNew}><span>＋</span> Nuevo expediente</button></header><div className="metrics"><div><span>Expedientes registrados</span><strong>{records.length}</strong></div><div><span>Último registro</span><strong>{records[0] ? new Date(records[0].createdAt).toLocaleDateString('es-NI') : '—'}</strong></div><div><span>Estado de almacenamiento</span><strong className="storage-ok">● Local</strong></div></div><div className="table-card"><div className="table-toolbar"><div><h2>Pacientes</h2><p>{records.length ? 'Consulta y continúa trabajando en un expediente.' : 'Comienza registrando el primer expediente.'}</p></div><label className="search"><span>⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar por nombre o cédula" /></label></div>{filteredRecords.length ? <div className="record-list">{filteredRecords.map((record) => <div className="record-row" key={record.id}><div className="avatar">{record.patient.name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase() || 'P'}</div><div className="record-name"><strong>{record.patient.name}</strong><span>{record.patient.idNumber || 'Sin cédula'}</span></div><div className="record-meta"><span>Expediente</span><strong>{record.patient.recordNumber || 'Sin número'}</strong></div><div className="record-meta"><span>Registrado</span><strong>{new Date(record.createdAt).toLocaleDateString('es-NI')}</strong></div><button className="row-action" onClick={() => { setForm(record); setActiveStep(0); setMode('wizard'); }}>Abrir →</button></div>)}</div> : <div className="empty-state"><div className="empty-icon">＋</div><h3>No hay expedientes todavía</h3><p>Registra los datos de tu primer paciente en unos minutos.</p><button className="button button-secondary" onClick={startNew}>Crear expediente</button></div>}</div>{notice && <div className="toast">{notice}</div>}</main></div>;
+  if (mode === 'summary') return <RecordSummary record={selectedRecord} onBack={() => setMode('list')} onEdit={editRecord} />;
+
+  if (mode === 'list') return <div className="app-shell"><aside className="sidebar"><div className="brand"><span className="brand-mark">+</span><div><strong>Clínica</strong><small>Historia médica</small></div></div><div className="sidebar-status"><span className="status-dot" /> Base local SQLite<br /><small>Datos bajo tu control</small></div><div className="sidebar-footer">Versión inicial<br />Expedientes clínicos</div></aside><main className="main-area"><header className="topbar"><div><p className="kicker">GESTIÓN CLÍNICA</p><h1>Expedientes</h1><p className="muted">Administra las historias clínicas de tus pacientes.</p></div><button className="button button-primary" onClick={startNew}><span>＋</span> Nuevo expediente</button></header><div className="metrics"><div><span>Expedientes registrados</span><strong>{records.length}</strong></div><div><span>Último registro</span><strong>{records[0] ? new Date(records[0].createdAt).toLocaleDateString('es-NI') : '—'}</strong></div><div><span>Estado de almacenamiento</span><strong className="storage-ok">● Local</strong></div></div><div className="table-card"><div className="table-toolbar"><div><h2>Pacientes</h2><p>{records.length ? 'Consulta y continúa trabajando en un expediente.' : 'Comienza registrando el primer expediente.'}</p></div><label className="search"><span>⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar por nombre o cédula" /></label></div>{filteredRecords.length ? <div className="record-list">{filteredRecords.map((record) => <div className="record-row" key={record.id}><div className="avatar">{record.patient.name.split(' ').map((part) => part[0]).slice(0, 2).join('').toUpperCase() || 'P'}</div><div className="record-name"><strong>{record.patient.name}</strong><span>{record.patient.idNumber || 'Sin cédula'}</span></div><div className="record-meta"><span>Expediente</span><strong>{record.patient.recordNumber || 'Sin número'}</strong></div><div className="record-meta"><span>Registrado</span><strong>{new Date(record.createdAt).toLocaleDateString('es-NI')}</strong></div>  <button className="row-action" onClick={() => openRecord(record)}>Abrir →</button><button className="row-action row-edit" onClick={() => { setForm(record); setActiveStep(0); setMode('wizard'); setNotice(''); }}>Editar ✎</button></div>)}</div> : <div className="empty-state"><div className="empty-icon">＋</div><h3>No hay expedientes todavía</h3><p>Registra los datos de tu primer paciente en unos minutos.</p><button className="button button-secondary" onClick={startNew}>Crear expediente</button></div>}</div>{notice && <div className="toast">{notice}</div>}</main></div>;
 
   return <div className="wizard-shell"><header className="wizard-topbar"><button className="back-link" onClick={() => setMode('list')}>← Expedientes</button><div className="wizard-title"><span>Nuevo expediente</span><small>Guardado local automático al finalizar</small></div><div className="step-counter">Paso <strong>{activeStep + 1}</strong> de {steps.length}</div></header><div className="wizard-layout"><nav className="step-nav"><div className="step-nav-caption">HISTORIA CLÍNICA</div>{steps.map((step, index) => <button className={`step-item ${activeStep === index ? 'active' : ''} ${activeStep > index ? 'complete' : ''}`} key={step.id} onClick={() => setActiveStep(index)}><span className="step-number">{activeStep > index ? '✓' : step.number}</span><span><strong>{step.label}</strong><small>{step.description}</small></span></button>)}</nav><main className="wizard-content"><div className="content-intro"><div><p className="kicker">PASO {current.number}</p><h1>{current.label}</h1><p className="muted">{current.description}</p></div><div className="progress"><span style={{ width: `${((activeStep + 1) / steps.length) * 100}%` }} /></div></div>{renderStep()}<div className="wizard-actions"><button className="button button-ghost" onClick={() => activeStep ? setActiveStep(activeStep - 1) : setMode('list')}>← Atrás</button>{activeStep < steps.length - 1 ? <button className="button button-primary" onClick={() => setActiveStep(activeStep + 1)}>Continuar <span>→</span></button> : <button className="button button-primary" onClick={saveRecord}>Guardar expediente <span>✓</span></button>}</div>{notice && <div className="inline-notice">{notice}</div>}</main></div></div>;
 }
