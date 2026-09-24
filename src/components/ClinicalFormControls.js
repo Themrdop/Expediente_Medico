@@ -14,11 +14,11 @@ export const infectiousOptions = ['Hepatitis', 'Sífilis', 'TB', 'Cólera', 'Ame
 export const hereditaryOptions = ['Alergias', 'Diabetes mellitus', 'Hipertensión arterial', 'Enfermedad reumática', 'Enfermedad renal', 'Enfermedades oculares', 'Enfermedades cardiacas', 'Enfermedades hepáticas', 'Enfermedades musculares', 'Malformaciones congénitas', 'Desórdenes mentales'];
 
 export function Field({ label, value, onChange, type = 'text', placeholder, required, readOnly = false, rightElement, inputMode, maxLength }) {
-  return <label className="field"><span>{label}{required && <b> *</b>}</span><div className="field-input-wrap"><input type={type} value={value || ''} placeholder={placeholder} readOnly={readOnly} inputMode={inputMode} maxLength={maxLength} onChange={(event) => onChange(event.target.value)} />{rightElement && <div className="field-input-suffix">{rightElement}</div>}</div></label>;
+  return <label className="field"><span>{label}{required && <b> *</b>}</span><div className="field-input-wrap"><input type={type} value={value || ''} placeholder={placeholder} readOnly={readOnly} inputMode={inputMode} maxLength={maxLength} required={required} onChange={(event) => onChange(event.target.value)} />{rightElement && <div className="field-input-suffix">{rightElement}</div>}</div></label>;
 }
 
 export function SelectField({ label, value, onChange, options, required }) {
-  return <label className="field"><span>{label}{required && <b> *</b>}</span><select value={value || ''} onChange={(event) => onChange(event.target.value)}><option value="">Selecciona una opción</option>{options.map((option) => <option value={option} key={option}>{option}</option>)}</select></label>;
+  return <label className="field"><span>{label}{required && <b> *</b>}</span><select value={value || ''} onChange={(event) => onChange(event.target.value)} required={required}><option value="">Selecciona una opción</option>{options.map((option) => <option value={option} key={option}>{option}</option>)}</select></label>;
 }
 
 export function Textarea({ label, value, onChange, placeholder }) {

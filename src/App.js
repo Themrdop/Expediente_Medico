@@ -27,6 +27,19 @@ const emptyForm = {
   examination: { vitals: { fc: '', fr: '', bp: '', temperature: '' }, anthropometry: { weight: '', height: '', bmi: '' }, general: '', skin: '', headNeck: '', thorax: '', abdomen: '', extremities: '', neurologic: '', observations: '', diagnoses: '' },
 };
 
+export function validateRequiredPatientFields(form) {
+  const patient = form?.patient || {};
+  const requiredFields = [
+    { key: 'name', label: 'Nombre y apellido', value: patient.name },
+    { key: 'idNumber', label: 'No. de cédula', value: patient.idNumber },
+    { key: 'sex', label: 'Sexo', value: patient.sex },
+  ];
+
+  return requiredFields
+    .filter(({ value }) => !String(value ?? '').trim())
+    .map(({ label }) => label);
+}
+
 function createRecordNumber(records) {
   const now = new Date();
   const date = [
@@ -79,7 +92,13 @@ function App() {
     setNotice('');
   };
   const saveRecord = async () => {
-    if (!form.patient.name.trim() || !form.patient.idNumber.trim()) { setNotice('Completa el nombre y la cédula antes de guardar.'); setActiveStep(0); return; }
+    const missingRequiredFields = validateRequiredPatientFields(form);
+    if (missingRequiredFields.length) {
+      setNotice(`Completa los campos requeridos: ${missingRequiredFields.join(', ')}.`);
+      setActiveStep(0);
+      return;
+    }
+
     const recordNumberInUse = records.some((record) => record.id !== form.id && record.patient && record.patient.recordNumber === form.patient.recordNumber);
     if (recordNumberInUse) {
       setNotice('El número de expediente ya existe. Inicia un expediente nuevo para generar otro número.');
