@@ -42,6 +42,7 @@ export function AntecedentesNoPatologicosStep({ form, update }) {
             </label>
             {form.personal[key] &&
               <input
+                aria-label={`${label}: tipo, cantidad y frecuencia`}
                 value={form.personal[detail]}
                 placeholder="Tipo, cantidad y frecuencia"
                 onChange={(e) => update('personal', detail, e.target.value)} />}
