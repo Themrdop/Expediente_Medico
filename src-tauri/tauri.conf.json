@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Historia Clínica",
+  "version": "0.1.0",
+  "identifier": "com.clinica.historia-medica",
+  "build": {
+    "beforeDevCommand": "npm start",
+    "devUrl": "http://localhost:3000",
+    "frontendDist": "../build"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "title": "Historia Clínica",
+        "width": 1280,
+        "height": 820,
+        "minWidth": 960,
+        "minHeight": 680,
+        "resizable": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self' http://localhost:3000; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval' http://localhost:3000; connect-src 'self' ipc: http://ipc.localhost http://localhost:3000 ws://localhost:3000 https://api.hacienda.go.cr"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": []
+  }
+}
