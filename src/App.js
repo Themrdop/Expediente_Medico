@@ -107,6 +107,7 @@ function App() {
     }
     const record = { ...form, id: form.id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())), createdAt: form.createdAt || new Date().toISOString() };
     const next = form.id ? records.map((item) => item.id === form.id ? record : item) : [record, ...records];
+    setForm(record);
     setRecords(next);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     if (window.__TAURI_INTERNALS__) {
