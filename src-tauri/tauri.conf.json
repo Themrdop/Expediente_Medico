@@ -21,7 +21,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self' http://localhost:3000; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval' http://localhost:3000"
+      "csp": "default-src 'self' http://localhost:3000; style-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self' 'unsafe-eval' http://localhost:3000; connect-src 'self' ipc: http://ipc.localhost http://localhost:3000 ws://localhost:3000 https://api.hacienda.go.cr"
     }
   },
   "bundle": {
